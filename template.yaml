@@ -4,18 +4,50 @@ Transform: "AWS::Serverless-2016-10-31"
 Parameters:
   ApiSpec:
     type: String
+    Default: ./swagger.yaml
   Version:
     Type: String
     Default: v1
 
 Resources:
+  # UserPool:
+  #   Type: AWS::Cognito::UserPool
+  #   Properties:
+  #     AdminCreateUserConfig:
+  #       AllowAdminCreateUserOnly: false
+  #     UserPoolName: Users
+  #     UsernameAttributes:
+  #     - email
+  #     AutoVerifiedAttributes:
+  #     - email
+  #     Policies:
+  #       PasswordPolicy:
+  #         MinimumLength: 6
+  #         RequireLowercase: true
+  #         RequireNumbers: false
+  #         RequireSymbols: false
+  #         RequireUppercase: true
+  # UserPoolTokenClient:
+  #   Type: AWS::Cognito::UserPoolClient
+  #   Properties:
+  #     UserPoolId: !Ref UserPool
+  #     GenerateSecret: false
+  #     ExplicitAuthFlows:
+  #     - USER_PASSWORD_AUTH
+  # UserPoolGroupAdmin:
+  #   Type: AWS::Cognito::UserPoolGroup
+  #   Properties : 
+  #     Description : Admin priviledges Globally
+  #     GroupName : Admin
+  #     UserPoolId: !Ref UserPool
+
   # You don't actually need the API, but it does allow you to centralize your auth config, and allows you to add an Open API Spec
   ServiceApi:
     Type: AWS::Serverless::Api
     Properties:
       Name: ServiceApi
       StageName: !Ref Version
-      DefinitionUri: ./swagger.json
+      DefinitionUri: !Ref ApiSpec
       # This is only needed if you are Requesting from a domain that is not shared with this API Domain
       # Know the security implications before doing this on a production site
       Cors:
@@ -33,7 +65,6 @@ Resources:
       Description: Handles the basic request
       Runtime: go1.x
       Handler: ./dist/handler
-      Timeout: 10
       # Policies:
         # Leaving this here so you can avoid the Gotcha.  Whatever this function does, it must be given permission to do so.
         # Check here: https://github.com/awslabs/serverless-application-model/blob/master/docs/policy_templates.rst
