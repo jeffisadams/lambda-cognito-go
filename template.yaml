@@ -1,0 +1,48 @@
+Description: "Microservice API and Auth settings"
+Transform: "AWS::Serverless-2016-10-31"
+
+Parameters:
+  ApiSpec:
+    type: String
+  Version:
+    Type: String
+    Default: v1
+
+Resources:
+  # You don't actually need the API, but it does allow you to centralize your auth config, and allows you to add an Open API Spec
+  ServiceApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ServiceApi
+      StageName: !Ref Version
+      DefinitionUri: ./swagger.json
+      # This is only needed if you are Requesting from a domain that is not shared with this API Domain
+      # Know the security implications before doing this on a production site
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+      # Auth:
+      #   Authorizers:
+      #     CognitoAuthorizer:
+      #       UserPoolArn: !ImportValue UserPoolArn
+
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Handles the basic request
+      Runtime: go1.x
+      Handler: ./dist/handler
+      Timeout: 10
+      # Policies:
+        # Leaving this here so you can avoid the Gotcha.  Whatever this function does, it must be given permission to do so.
+        # Check here: https://github.com/awslabs/serverless-application-model/blob/master/docs/policy_templates.rst
+      Events:
+        Get:
+          Type: Api
+          Properties:
+            Path: /
+            RestApiId: !Ref ServiceApi
+            Method: GET
+            # Auth:
+            #   Authorizer: CognitoAuthorizer

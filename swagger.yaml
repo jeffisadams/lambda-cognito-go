@@ -1,0 +1,34 @@
+swagger: "2.0"
+info:
+  description: This is a test of a very boilerplate API Gateway
+  version: 0.0.1
+  title: Cognito Lambda GO
+host: localhost:3000
+schemes:
+- http
+- https
+paths:
+  /:
+    get:
+      tags:
+      - boilerplate
+      summary: Returns a basic message after authenticating
+      description: ""
+      operationId: boilerplate
+      responses:
+        200:
+          description: "I hear you"
+          schema:
+            $ref: "#/definitions/Result"
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: cognito_auth
+    in: header
+definitions:
+  Result:
+    type: "object"
+    properties:
+      message:
+        type: string
+        description: Mostly filler
