@@ -6,6 +6,7 @@
 *.dylib
 
 dist/
+template_deploy.yaml
 
 # Test binary, build with `go test -c`
 *.test
