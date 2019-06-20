@@ -48,9 +48,7 @@ UserPoolTokenClient:
       ExplicitAuthFlows:
       - USER_PASSWORD_AUTH
 ```
-Generally speaking this user pool has mostly default settings.  Customization is likely needed depending on the use case, but this will be a minimum set that works.  Take a look at the [Cloudformation Reference Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html) for more details.  This will build a pool uses the Email as the primary username login.  The pool creates the logical pool to use.  The TokenClient creates the ability to log in.  For logging in, we will be using the AWS CLI.  More often you will need an Oath Flow domain or to add the created client to a single page application.  There are some other options for logging in, but as per usual it's all use case dependant.
-
-We also create your first user using a set Environment variable YOUR_EMAIL.  This will send your email a temporary password on stack creation.  Below are instructions for how we will login (spoiler, it's with the CLI).
+We create a userpool and a user pool client.  The pool is the abstract collection of users and their info.  The client is the ability to login using the SDK or the CLI.  You may need additional clients (We don't yet have Oauth) and additional properties, but this is a working minimum set that works.  Take a look at the [Cloudformation Reference Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html) for more details.  For logging in, we will be using the AWS CLI.
 ```
 UserPoolUser:
     Type: AWS::Cognito::UserPoolUser
@@ -60,6 +58,7 @@ UserPoolUser:
       Username: !Ref YourEmail
       UserPoolId: !Ref UserPool
 ```
+We also create your first user using a set Environment variable YOUR_EMAIL.  This will send your email a temporary password on stack creation.  Below are instructions for how we will login (spoiler, it's with the CLI).
 
 ## API
 Technically we don't need this.  Sam will create one for us.  But then when you have two functions, you have two full APIs.  We can do better.
@@ -186,7 +185,7 @@ aws cognito-idp admin-respond-to-auth-challenge \
 To use this script, get the output values from your cloudformation stack and run the following command:
 `./scripts/login_first.sh {{User Pool ID}} {{Token Client ID}} {{Your Email}} {{Password in the Email AWS sent you}}`
 
-This will change your password to 'Testing1' and log you in.  You will get back an JSON Web Token or JWT token you can now use to finally call the damn API.
+This will change your password to 'Testing1' and log you in.  You will get back a JSON Web Token or JWT token you can now use to finally call the damn API.
 
 # Bring it home
 Now that we have the auth token, we can add it to the headers and call the 
