@@ -1,5 +1,5 @@
 # Supporting codebase for blog tutorial
-Visit (Here)[https://tenmilesquare.com] to view the context.
+Visit (Here)[https://tenmilesquare.com/aws-sam-api-with-cognito/] to view the context.
 
 
 ## To run
