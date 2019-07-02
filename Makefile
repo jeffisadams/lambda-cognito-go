@@ -46,7 +46,6 @@ deploy: build
 		--no-fail-on-empty-changeset \
 		--template-file template_deploy.yaml \
 		--stack-name $(STACK_NAME) \
-		--capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM \
 		--parameter-overrides "ResourceBucket=$(STACK_BUCKET)" "YourEmail=$(YOUR_EMAIL)"
 
 .PHONY: teardown
