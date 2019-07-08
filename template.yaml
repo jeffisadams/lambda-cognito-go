@@ -4,8 +4,6 @@ Transform: "AWS::Serverless-2016-10-31"
 Parameters:
   YourEmail:
     Type: String
-  ResourceBucket:
-    Type: String
   Version:
     Type: String
     Default: v1
@@ -45,7 +43,6 @@ Resources:
 
   # You don't actually need the API, but it does allow you to centralize your auth config, and allows you to add an Open API Spec
   ServiceApi:
-    DependsOn: UserPool
     Type: AWS::Serverless::Api
     Properties:
       Name: ServiceApi
