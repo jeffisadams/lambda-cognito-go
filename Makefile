@@ -27,6 +27,7 @@ deps: clean
 
 .PHONY: build
 build: deps
+	go env -w GO111MODULE=off # Needed to fix "github.com/aws/aws-lambda-go/events: go.mod file not found" issue.
 	GOOS=linux go build -o dist/authenticated ./src/authenticated.go
 	GOOS=linux go build -o dist/open ./src/open.go
 

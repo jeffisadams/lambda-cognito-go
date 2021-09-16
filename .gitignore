@@ -13,3 +13,6 @@ template_deploy.yaml
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# IntelliJ
+.idea/
